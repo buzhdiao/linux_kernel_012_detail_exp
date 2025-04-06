@@ -1,0 +1,1 @@
+qemu-system-i386.exe-boot a-fda linux.img
