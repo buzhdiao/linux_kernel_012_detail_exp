@@ -3,9 +3,7 @@ LD := ld -m elf_x86_64
 
 LDFLAG := -Ttext 0x0 -s --oformat binary
 
-linux.img : bootsect 
-
-bootsect : bootsect.o
+linux.img : bootsect.o
 	$(LD) $(LDFLAG) -o $@ $<
 
 bootsect.o : bootsect.S
