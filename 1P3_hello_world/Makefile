@@ -19,22 +19,16 @@ all: $(TARGET)
 
 # 生成镜像文件的规则
 $(TARGET): $(OBJ_FILES)
-    @echo "正在链接生成 $(TARGET)..."
-    $(LD) $(LDFLAG) -o $@ $<
-    @echo "$(TARGET) 生成完成。"
+	$(LD) $(LDFLAG) -o $@ $<
 
 # 生成目标文件的规则
 %.o: %.S
-    @echo "正在汇编 $< 生成 $@..."
-    $(AS) -o $@ $<
-    @echo "$@ 汇编完成。"
+	$(AS) -o $@ $<
 
 # 清理规则，删除中间文件和目标文件
 clean:
-    @echo "正在清理生成的文件..."
-    rm -f $(OBJ_FILES)
-    rm -f $(TARGET)
-    @echo "清理完成。"
+	rm -f $(OBJ_FILES)
+	rm -f $(TARGET)
 
 # 防止 Makefile 中出现与文件名冲突的情况
 .PHONY: all clean
