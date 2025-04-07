@@ -1,19 +1,19 @@
 # 定义系统大小常量，SYSSIZE 表示系统代码的大小为 0x3000 字节
 SYSSIZE = 0x3000
 # 定义设置部分长度常量，SETUPLEN 表示设置部分的扇区数为 4
-SETUPLEN	= 4
+SETUPLEN  = 4
 # 定义引导段地址常量，BOOTSEG 表示引导段的段地址为 0x7c0，通常引导程序加载到该段
 BOOTSEG	 = 0x7c0
 # 定义初始化段地址常量，INITSEG 表示初始化段的段地址为 0x9000，用于初始化相关操作
 INITSEG	 = 0x9000
 # 定义设置段地址常量，SETUPSEG 表示设置段的段地址为 0x9020，用于系统设置相关操作
-SETUPSEG	= 0x9020
+SETUPSEG  = 0x9020
 # 定义系统段地址常量，SYSSEG 表示系统段的段地址为 0x1000，存放系统代码
-SYSSEG	= 0x1000
+SYSSEG = 0x1000
 # 计算结束段地址，ENDSEG 为系统段地址加上系统大小，即系统代码的结束位置
-ENDSEG	= SYSSEG + SYSSIZE
+ENDSEG  = SYSSEG + SYSSIZE
 # 定义根设备号常量，ROOT_DEV 表示根设备的设备号为 0x000
-ROOT_DEV	= 0x000
+ROOT_DEV  = 0x000
 
 # 指定使用 16 位代码模式，适用于早期 8086 架构的处理器
 .code16
