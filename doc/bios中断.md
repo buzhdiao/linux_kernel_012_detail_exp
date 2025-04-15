@@ -6,6 +6,28 @@ bios提供了一组服务，可以帮助我们操纵硬件，避免我们直接�
 
 # 0x10号中断
 参考:https://www.cnblogs.com/kakafa/p/18312145
+INT10中断是BIOS用于控制显示屏的关键接口，包括设置显示器模式、光标管理和显示特性等
+
+INT 0x10 是显示类指令：
+
+INT 0x10, AH = 1 -- set up the cursor
+INT 0x10, AH = 3 -- 获取光标位置
+INT 0x10,AH = 0xE -- 显示字符
+INT 0x10, AH = 0xF -- get video page and mode
+INT 0x10, AH = 0x11 -- set 8x8 font
+INT 0x10, AH = 0x12 -- detect EGA/VGA
+INT 0x10, AH = 0x13 -- 显示字符串，具体寄存器设置可以参考：http://www.ctyme.com/intr/rb-0210.htm
+INT 0x10, AH = 0x1200 -- Alternate print screen
+INT 0x10, AH = 0x1201 -- turn off cursor emulation
+INT 0x10, AX = 0x4F00 -- video memory size
+INT 0x10, AX = 0x4F01 -- VESA get mode information call
+INT 0x10, AX = 0x4F02 -- select VESA video modes
+INT 0x10, AX = 0x4F0A -- VESA 2.0 protected mode interface
+
+在调用 BIOS 函数之前，需要先设置 AH 或 AX（或 EAX） 寄存器，然后执行对应的 INT 指令
+
+AH=0xE 的功能是显示字符，同时光标前移（寄存器值的设置：AL=字符，BL=在图形模式下表示文字的颜色，BH=目前的显示页·在图形模式下为0）
+
 
 
 # 0x13号中断

@@ -1,4 +1,4 @@
-# 定义系统大小常量，SYSSIZE 表示系统代码的大小为 0x3000 字节
+# 定义系统大小常量，SYSSIZE 表示系统代码的大小为 0x3000 字节， 12KB
 SYSSIZE = 0x3000
 # 定义设置部分长度常量，SETUPLEN 表示设置部分的扇区数为 4
 SETUPLEN  = 4
@@ -309,7 +309,7 @@ bad_rt:
 	movw $0x0, %ax
 	# 将 0x0 赋给 DX 寄存器
 	movw $0x0, %dx
-	# 调用 BIOS 中断 0x13 重置磁盘
+	# 调用 BIOS 中断 0x13 重置0号磁盘
 	int	$0x13
 	# 将 DX 寄存器的值从堆栈弹出
 	popw %dx

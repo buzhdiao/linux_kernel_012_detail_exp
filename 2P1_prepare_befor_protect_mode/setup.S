@@ -179,16 +179,21 @@ do_move:
 
 end_move:
 	# 将 0xb800 加载到 AX 寄存器，这是文本显示缓冲区的段地址
+	# GS general segment register 通用段寄存器
 	movw $0xb800, %ax
 	# 将 AX 的值复制到段寄存器 GS，使 GS 指向文本显示缓冲区
 	movw %ax, %gs
 	# 设置 AH 寄存器为 0xf，作为文本颜色
 	movb $0xf, %ah
-	# 设置 AL 寄存器为 0x41，可能是要显示的字符
+	# 设置 AL 寄存器为 0x41，对应ASCII的字符"A"
 	movb $0x41, %al
 	# 将 0x100 加载到目的变址寄存器 EDI
+	# extended destination index, 扩展目的索引寄存器，32位的时候是 EDI
+	# 16位的时候就是di,
 	movl $0x100, %edi
 	# 将 AX 的值存储到 GS:DI 指向的文本显示缓冲区位置
+	# 保护模式下：地址= gs * 16 + di = 0xb8100 
+	# 实模式下：地址 = gs + di = 0xb900 这个地址对应的内容是0x0x41
 	movw %ax, %gs:(%di)
 
 	# 将 SETUPSEG 的值加载到 AX 寄存器
@@ -196,6 +201,7 @@ end_move:
 	# 将 AX 的值复制到数据段寄存器 DS，使 DS 指向 SETUPSEG 段
 	movw %ax, %ds
 	# 加载全局描述符表（GDT）的 48 位指针
+	# load global descriptor table register 加载全局描述符表寄存器
 	lgdt gdt_48
 
 	# 调用 empty_8042 子程序，用于清空 8042 键盘控制器缓冲区
