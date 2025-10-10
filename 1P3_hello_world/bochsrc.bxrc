@@ -5,9 +5,11 @@
 # how much memory the emulated machine will have
 megs: 32
 
+# disassemble_flavor: att
+
 # filename of ROM images
 romimage: file=$BXSHARE/BIOS-bochs-latest
-vgaromimage: file=$BXSHARE/VGABIOS-lgpl-latest.bin
+# vgaromimage: file=$BXSHARE/VGABIOS-lgpl-latest.bin
 
 boot: floppy
 
@@ -20,14 +22,15 @@ floppyb: 1_44=floppyb.img, status=inserted
 # ata0-master: type=disk, path="hd10meg.img", cylinders=306, heads=4, spt=17
 
 # choose the boot disk.
-# disasm: intel=0
+# disasm:intel=0
+# disassemble_flavor: att
 
 
 # default config interface is textconfig.
 #config_interface: textconfig
 #config_interface: wx
 
-#display_library: x
+# display_library: x
 # other choices: win32 sdl wx carbon amigaos beos macintosh nogui rfb term svga
 
 # where do we send log messages?
@@ -51,3 +54,7 @@ clock: sync=both
 #keyboard: keymap=../keymaps/x11-pc-fr.map
 #keyboard: keymap=../keymaps/x11-pc-de.map
 #keyboard: keymap=../keymaps/x11-pc-es.map
+
+# display_library: x
+
+display_library: sdl, options="gui_debug"

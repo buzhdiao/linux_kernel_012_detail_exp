@@ -1,0 +1,230 @@
+00000000000i[      ] Bochs x86 Emulator 3.0
+00000000000i[      ]   Built from GitHub snapshot on February 16, 2025
+00000000000i[      ]   Timestamp: Sun Feb 16 10:00:00 CET 2025
+00000000000i[      ] System configuration
+00000000000i[      ]   processors: 1 (cores=1, HT threads=1)
+00000000000i[      ]   A20 line support: yes
+00000000000i[      ] IPS is set to 15000000
+00000000000i[      ] CPU configuration
+00000000000i[      ]   SMP support: no
+00000000000i[      ]   Using pre-defined CPU configuration: p4_willamette
+00000000000i[      ] Optimization configuration
+00000000000i[      ]   RepeatSpeedups support: yes
+00000000000i[      ]   Fast function calls: yes
+00000000000i[      ]   Handlers Chaining speedups: yes
+00000000000i[      ] Devices configuration
+00000000000i[      ]   PCI support: i440FX i430FX i440BX
+00000000000i[      ]   Networking: no
+00000000000i[      ]   Sound support: no
+00000000000i[      ]   USB support: UHCI
+00000000000i[      ]   VGA extension support: vbe voodoo
+00000000000i[IMG   ] Disk image modules
+00000000000i[IMG   ]   flat concat sparse dll growing undoable volatile vmware3
+00000000000i[IMG   ]   vmware4 vbox vpc vvfat
+00000000000i[USBCTL] Pluggable USB devices
+00000000000i[USBCTL]   floppy mouse tablet keypad keyboard hub disk cdrom
+00000000000i[USBCTL]   printer
+00000000000i[MEM0  ] allocated memory at 0x7f1e035da010. after alignment, vector=0x7f1e035db000, block_size = 128K
+00000000000i[MEM0  ] 32.00MB
+00000000000i[MEM0  ] mem block size = 0x00020000, blocks=256
+00000000000i[MEM0  ] rom at 0xfffe0000/131072 ('/usr/local/share/bochs/BIOS-bochs-latest')
+00000000000i[CPU0  ] initialized CPU model p4_willamette
+00000000000i[DEV   ] will paste characters every 100 iodev timer ticks
+00000000000i[STIMER] using 'slowdown' timer synchronization method
+00000000000i[PLUGIN] init_dev of 'pci' plugin device by virtual method
+00000000000i[DEV   ] i440FX PMC present at device 0, function 0
+00000000000i[PLUGIN] init_dev of 'pci2isa' plugin device by virtual method
+00000000000i[DEV   ] PIIX3 PCI-to-ISA bridge present at device 1, function 0
+00000000000i[PLUGIN] init_dev of 'cmos' plugin device by virtual method
+00000000000i[CMOS  ] Using local time for initial clock
+00000000000i[CMOS  ] Setting initial clock to: Sun Apr 20 22:51:26   2025 tz=utc (time0=1745189486)
+00000000000i[PLUGIN] init_dev of 'dma' plugin device by virtual method
+00000000000i[DMA   ] channel 4 used by cascade
+00000000000i[PLUGIN] init_dev of 'pic' plugin device by virtual method
+00000000000i[PLUGIN] init_dev of 'pit' plugin device by virtual method
+00000000000i[PIT   ] PIT using realtime synchronisation method
+00000000000i[PLUGIN] init_dev of 'vga' plugin device by virtual method
+00000000000i[MEM0  ] Register memory access handlers: 0x0000000a0000 - 0x0000000bffff
+00000000000i[VGA   ] interval=100000, mode=realtime
+00000000000i[VGA   ] Setting VGA update interval to 100000 (10.0 Hz)
+00000000000i[VGA   ] VSYNC using realtime mode
+00000000000i[MEM0  ] Register memory access handlers: 0x0000e0000000 - 0x0000e0ffffff
+00000000000i[BXVGA ] VBE Bochs Display Extension Enabled (16 MB)
+00000000000i[XGUI  ] test_alloc_colors: 16 colors available out of 16 colors tried
+00000000000i[XGUI  ] font 8 wide x 16 high, display depth = 24
+00000000000i[XGUI  ] maximum host resolution: x=2160 y=1390
+00000000000i[MEM0  ] rom at 0xc0000/32768 ('/usr/local/share/bochs/VGABIOS-lgpl-latest.bin')
+00000000000i[PLUGIN] init_dev of 'floppy' plugin device by virtual method
+00000000000i[DMA   ] channel 2 used by Floppy Drive
+00000000000i[FLOPPY] fd0: 'linux.img' ro=0, h=2,t=80,spt=18
+00000000000i[FLOPPY] tried to open 'floppyb.img' read/write: No such file or directory
+00000000000i[FLOPPY] tried to open 'floppyb.img' read only: No such file or directory
+00000000000i[FLOPPY] Using boot sequence floppy, none, none
+00000000000i[FLOPPY] Floppy boot signature check is enabled
+00000000000i[PLUGIN] init_dev of 'acpi' plugin device by virtual method
+00000000000i[DEV   ] ACPI Controller present at device 1, function 3
+00000000000i[PLUGIN] init_dev of 'hpet' plugin device by virtual method
+00000000000i[HPET  ] initializing HPET
+00000000000i[MEM0  ] Register memory access handlers: 0x0000fed00000 - 0x0000fed003ff
+00000000000i[PLUGIN] init_dev of 'ioapic' plugin device by virtual method
+00000000000i[IOAPIC] initializing I/O APIC
+00000000000i[MEM0  ] Register memory access handlers: 0x0000fec00000 - 0x0000fec00fff
+00000000000i[IOAPIC] IOAPIC enabled (base address = 0xfec00000)
+00000000000i[PLUGIN] init_dev of 'keyboard' plugin device by virtual method
+00000000000i[PLUGIN] init_dev of 'harddrv' plugin device by virtual method
+00000000000i[PLUGIN] init_dev of 'pci_ide' plugin device by virtual method
+00000000000i[DEV   ] PIIX3 PCI IDE controller present at device 1, function 1
+00000000000i[PLUGIN] init_dev of 'unmapped' plugin device by virtual method
+00000000000i[PLUGIN] init_dev of 'biosdev' plugin device by virtual method
+00000000000i[PLUGIN] init_dev of 'speaker' plugin device by virtual method
+00000000000i[PCSPK ] Using /dev/console for output
+00000000000i[PLUGIN] init_dev of 'extfpuirq' plugin device by virtual method
+00000000000i[PLUGIN] init_dev of 'parallel' plugin device by virtual method
+00000000000i[PAR   ] parallel port 1 at 0x0378 irq 7
+00000000000i[PLUGIN] init_dev of 'serial' plugin device by virtual method
+00000000000i[SER   ] com1 at 0x03f8 irq 4 (mode: null)
+00000000000i[PLUGIN] init_dev of 'iodebug' plugin device by virtual method
+00000000000i[PLUGIN] init_dev of 'usb_uhci' plugin device by virtual method
+00000000000i[DEV   ] USB UHCI present at device 1, function 2
+00000000000i[UHCI  ] USB UHCI initialized
+00000000000i[PLUGIN] register state of 'pci' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'pci2isa' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'cmos' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'dma' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'pic' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'pit' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'vga' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'floppy' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'unmapped' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'biosdev' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'speaker' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'extfpuirq' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'parallel' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'serial' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'iodebug' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'usb_uhci' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'acpi' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'hpet' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'ioapic' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'keyboard' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'harddrv' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'pci_ide' plugin device by virtual method
+00000000000i[SYS   ] bx_pc_system_c::Reset(HARDWARE) called
+00000000000i[CPU0  ] cpu hardware reset
+00000000000i[APIC0 ] allocate APIC id=0 (MMIO enabled) to 0x0000fee00000
+00000000000i[CPU0  ] CPUID[0x00000000]: 00000002 756e6547 6c65746e 49656e69
+00000000000i[CPU0  ] CPUID[0x00000001]: 00000f12 00010800 00000000 0febfbff
+00000000000i[CPU0  ] CPUID[0x00000002]: 665b5001 00000000 00000000 007a7040
+00000000000i[CPU0  ] CPUID[0x80000000]: 80000004 00000000 00000000 00000000
+00000000000i[CPU0  ] CPUID[0x80000001]: 00000000 00000000 00000000 00000000
+00000000000i[CPU0  ] CPUID[0x80000002]: 20202020 20202020 20202020 6e492020
+00000000000i[CPU0  ] CPUID[0x80000003]: 286c6574 50202952 69746e65 52286d75
+00000000000i[CPU0  ] CPUID[0x80000004]: 20342029 20555043 30382e31 007a4847
+00000000000i[CPU0  ] CPU Features supported:
+00000000000i[CPU0  ] 		x87
+00000000000i[CPU0  ] 		486ni
+00000000000i[CPU0  ] 		pentium_ni
+00000000000i[CPU0  ] 		p6ni
+00000000000i[CPU0  ] 		mmx
+00000000000i[CPU0  ] 		debugext
+00000000000i[CPU0  ] 		vme
+00000000000i[CPU0  ] 		pse
+00000000000i[CPU0  ] 		pae
+00000000000i[CPU0  ] 		pge
+00000000000i[CPU0  ] 		mtrr
+00000000000i[CPU0  ] 		pat
+00000000000i[CPU0  ] 		sysenter_sysexit
+00000000000i[CPU0  ] 		clflush
+00000000000i[CPU0  ] 		sse
+00000000000i[CPU0  ] 		sse2
+00000000000i[CPU0  ] 		xapic
+00000000000i[PLUGIN] reset of 'pci' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'pci2isa' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'cmos' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'dma' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'pic' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'pit' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'vga' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'floppy' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'acpi' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'hpet' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'ioapic' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'keyboard' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'harddrv' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'pci_ide' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'unmapped' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'biosdev' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'speaker' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'extfpuirq' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'parallel' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'serial' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'iodebug' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'usb_uhci' plugin device by virtual method
+00000000000i[      ] set SIGINT handler to bx_debug_ctrlc_handler
+00000001740i[BIOS  ] BIOS BUILD DATE: 02/16/25
+00000333062i[KBD   ] reset-disable command received
+00000338314i[BIOS  ] Starting rombios32
+00000338752i[BIOS  ] Shutdown flag 0
+00000339350i[BIOS  ] ram_size=0x02000000
+00000339782i[BIOS  ] ram_end=32MB
+00000351776i[BIOS  ] Found 1 cpu(s)
+00000365734i[BIOS  ] bios_table_addr: 0x000fa168 end=0x000fcc00
+00000693550i[PCI   ] i440FX PMC write to PAM register 59 (TLB Flush)
+00001021485i[P2ISA ] PCI IRQ routing: PIRQA# set to 0x0b
+00001021509i[P2ISA ] PCI IRQ routing: PIRQB# set to 0x09
+00001021533i[P2ISA ] PCI IRQ routing: PIRQC# set to 0x0b
+00001021557i[P2ISA ] PCI IRQ routing: PIRQD# set to 0x09
+00001021567i[P2ISA ] write: ELCR2 = 0x0a
+00001022336i[BIOS  ] PIIX3/PIIX4 init: elcr=00 0a
+00001036012i[BIOS  ] PCI: bus=0 devfn=0x00: vendor_id=0x8086 device_id=0x1237 class=0x0600
+00001038356i[BIOS  ] PCI: bus=0 devfn=0x08: vendor_id=0x8086 device_id=0x7000 class=0x0601
+00001040539i[BIOS  ] PCI: bus=0 devfn=0x09: vendor_id=0x8086 device_id=0x7010 class=0x0101
+00001040774i[PIDE  ] BAR #4: i/o base address = 0xc000
+00001041390i[BIOS  ] region 4: 0x0000c000
+00001043425i[BIOS  ] PCI: bus=0 devfn=0x0a: vendor_id=0x8086 device_id=0x7020 class=0x0c03
+00001043638i[UHCI  ] BAR #4: i/o base address = 0xc020
+00001044254i[BIOS  ] region 4: 0x0000c020
+00001044382i[UHCI  ] new IRQ line = 9
+00001046304i[BIOS  ] PCI: bus=0 devfn=0x0b: vendor_id=0x8086 device_id=0x7113 class=0x0680
+00001046580i[ACPI  ] new IRQ line = 11
+00001046594i[ACPI  ] new IRQ line = 9
+00001046622i[ACPI  ] new PM base address: 0xb000
+00001046636i[ACPI  ] new SM base address: 0xb100
+00001046664i[PCI   ] setting SMRAM control register to 0x4a
+00001210799i[CPU0  ] Enter to System Management Mode
+00001210810i[CPU0  ] RSM: Resuming from System Management Mode
+00001374866i[PCI   ] setting SMRAM control register to 0x0a
+00001401529i[BIOS  ] MP table addr=0x000fa240 MPC table addr=0x000fa170 size=0xc8
+00001403236i[BIOS  ] SMBIOS table addr=0x000fa250
+00001405325i[BIOS  ] ACPI tables: RSDP addr=0x000fa370 ACPI DATA addr=0x01ff0000 size=0xff8
+00001408310i[BIOS  ] Firmware waking vector 0x1ff00cc
+00001410564i[PCI   ] i440FX PMC write to PAM register 59 (TLB Flush)
+00001411294i[BIOS  ] bios_table_cur_addr: 0x000fa394
+00001511247i[VBIOS ] VGABios ID: vgabios.c 2025-01-08
+00001511326i[BXVGA ] VBE known Display Interface b0c0
+00001511366i[BXVGA ] VBE known Display Interface b0c5
+00001512787i[VBIOS ] VBE Bios ID: vbe.c 2025-01-08
+00231725173i[BIOS  ] Booting from 0000:7c00
+00231725229i[      ] dbg: Quit
+00231725229i[CPU0  ] CPU is in real mode (active)
+00231725229i[CPU0  ] CS.mode = 16 bit
+00231725229i[CPU0  ] SS.mode = 16 bit
+00231725229i[CPU0  ] EFER = 0x00000000: ffxsr nxe lma lme sce
+00231725229i[CPU0  ] | EAX=6000aa55  EBX=00000000  ECX=00090000  EDX=00000000
+00231725229i[CPU0  ] | ESP=0000ffd6  EBP=00000000  ESI=000e0000  EDI=0000ffac
+00231725229i[CPU0  ] | EFLAGS=00000282: id vip vif ac vm rf nt IOPL=0 of df IF tf SF zf af pf cf
+00231725229i[CPU0  ] | SEG sltr(index|ti|rpl)     base    limit G D
+00231725229i[CPU0  ] |  CS:07c0( 0004| 0|  0) 00007c00 0000ffff 0 0
+00231725229i[CPU0  ] |  DS:0000( 0005| 0|  0) 00000000 0000ffff 0 0
+00231725229i[CPU0  ] |  SS:0000( 0005| 0|  0) 00000000 0000ffff 0 0
+00231725229i[CPU0  ] |  ES:0000( 0005| 0|  0) 00000000 0000ffff 0 0
+00231725229i[CPU0  ] |  FS:0000( 0005| 0|  0) 00000000 0000ffff 0 0
+00231725229i[CPU0  ] |  GS:0000( 0005| 0|  0) 00000000 0000ffff 0 0
+00231725229i[CPU0  ] | EIP=00000008 (00000008)
+00231725229i[CPU0  ] | CR0=0x60000010: pg CD NW ac wp ne ET ts em mp pe
+00231725229i[CPU0  ] | CR2=0x00000000
+00231725229i[CPU0  ] | CR3=0x00000000
+00231725229i[CPU0  ] | CR4=0x00000000: lass uintr pks cet pke smap smep keylock osxsave pcid fsgsbase smx vmx la57 umip osxmmexcpt osfxsr pce pge mce pae pse de tsd pvi vme
+00231725229i[CMOS  ] Last time: 1745189501 tz=utc (Sun Apr 20 22:51:41   2025)
+00231725229i[XGUI  ] Exit
+00231725229i[SIM   ] quit_sim called with exit code 0

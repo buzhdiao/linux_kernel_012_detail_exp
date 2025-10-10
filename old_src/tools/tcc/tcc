@@ -1,0 +1,7 @@
+#!/bin/bash
+export LDEMULATION=elf_i386
+filename=$1
+objfile=${filename/".c"/".o"}
+echo ${filename/".c"/".o"}
+gcc -c -fno-pic -m32 -ffreestanding -I./include -o $objfile $filename
+ld -e _start -M -T linkerscript/a.out.lds linkerscript/a.out.header $objfile runtime/libc.a -o $2 > test.map
