@@ -109,10 +109,27 @@ int main(int argc, char **argv)
 		c = SETUP_SECTS * 512 - i;
 		if (c > sizeof(buf))
 			c = sizeof(buf);
-		
+
 		if (write(1, buf, c) != c)
 			die("Write call failed");
 		i+=c;
+	}
+
+	/* 把整个镜像补齐到标准 1.44MB 软盘大小。
+	 * 注意：此时 i 只包含 setup 部分的字节数（引导扇区的 512 字节不在内），
+	 * 所以补齐目标是 1474560 - 512。
+	 * qemu 会按镜像文件大小猜测软盘几何参数，小镜像可能被猜成单磁头格式，
+	 * 导致 bootsect 读完一个磁道后翻磁头失败而死循环；补齐到 1.44MB 后
+	 * qemu 按 2 磁头、18 扇区/磁道识别，与 bochs 的默认行为一致 */
+	while (i < 1474560 - 512)
+	{
+		c = 1474560 - 512 - i;
+		if (c > sizeof(buf))
+			c = sizeof(buf);
+
+		if (write(1, buf, c) != c)
+			die("Write call failed");
+		i += c;
 	}
 
 	return 0;
