@@ -32,14 +32,27 @@ IDE： VS CODE
 | 3P2_format_print | 3.2 实现格式化打印 | ✅ | console + vsprintf + printk，换行回车滚屏 |
 | 3P3_mem_trap_syscall | 3.3 设置内存和陷阱处理 | ✅ | mem_map 内存管理 + 除零异常现场 + int 0x80 骨架 |
 | 4P1_create_init_process | 4.1 创建INIT进程 | ✅ | task_struct、TSS/LDT、move_to_user_mode（nr=15 验证通过） |
-| 4P2_second_process | 4.2 创建第二个进程 | 🚧 骨架 | 复制 PCB、进程切换 |
-| 4P3_fork_syscall | 4.3 第一个系统调用fork | 🚧 骨架 | fork + 写时复制 + 缺页中断 |
-| 5P1_keyboard ~ 5P4_terminal_state | 第5章 支持字符设备 | 🚧 骨架 | 键盘扫描码、read/write、ANSI、termios |
-| 6P1_harddisk ~ 6P4_floppy | 第6章 支持块设备 | 🚧 骨架 | 硬盘/分区表、缓冲区、软盘 DMA |
-| 7P1_minix_fs ~ 7P6_exec | 第7章 文件系统 | 🚧 骨架 | Minix 超级块、inode、文件/目录/链接、execve |
-| 8P1_posix ~ 8P3_clib | 第8章 系统服务接口 | 🚧 骨架 | POSIX 接口、信号/管道、用户态 C 库 |
+| 4P2_second_process | 4.2 创建第二个进程 | ✅ | 双进程轮转调度（ljmp 任务切换），qemu 验证交替输出 |
+| 4P3_fork_syscall | 4.3 第一个系统调用fork | ✅ | fork + 写时复制 + 缺页中断（父子数据分化验证） |
+| 5P1_keyboard | 5.1 支持键盘 | ✅ | IRQ1 + 扫描码 + 环形缓冲 + 睡眠唤醒（sendkey 验证） |
+| 5P2_input | 5.2 优化输入功能 | ✅ | tty 层 + 规范模式阻塞 read |
+| 5P3_output | 5.3 优化输出功能 | ✅ | write + ANSI 转义序列状态机（彩色验证） |
+| 5P4_terminal_state | 5.4 修改终端状态 | ✅ | termios 标志（ICANON/ECHO）+ 方向键 |
+| 6P1_harddisk | 6.1 硬盘的基本结构 | ✅ | ATA IDENTIFY + MBR 分区表解析 |
+| 6P2_buffer | 6.2 管理缓冲区 | ✅ | buffer_head 池 + 哈希链 + LRU（MISS/HIT 验证） |
+| 6P3_hd_driver | 6.3 硬盘驱动 | ✅ | 请求队列 + IRQ14 中断驱动读写（写读回校验） |
+| 6P4_floppy | 6.4 软盘驱动 | ✅ | FDC 编程 + 8237 DMA（内容级校验） |
+| 7P1_minix_fs | 7.1 Minix文件系统 | ✅ | 超级块 + 挂载 + 根目录（mkfs.py 配套工具） |
+| 7P2_inode | 7.2 管理inode | ✅ | inode 缓存 + namei 路径查找 |
+| 7P3_file | 7.3 管理普通文件 | ✅ | open/read/close，用户程序首次读文件成功 |
+| 7P4_dir | 7.4 管理目录 | ✅ | mkdir/creat/rmdir 写路径（已知 i_size 写回问题见 README） |
+| 7P5_link | 7.5 文件链接 | ✅ | 硬链接 + nlinks 引用计数 |
+| 7P6_exec | 7.6 执行程序 | 🟡 WIP | execve 代码完成；首次任务切换 #GP 留作练习（README 有调试线索） |
+| 8P1_posix | 8.1 POSIX接口 | ✅ | getpid/uptime/sysinfo |
+| 8P2_process | 8.2 管理进程 | 🟡 WIP | exit/wait/kill/管道代码完成；演示段唤醒条件待修 |
+| 8P3_clib | 8.3 构建C语言库 | ✅ | syscall 封装 + 用户态 printf，编译链验证（4556B 可执行） |
 
-骨架目录的 README 里写好了：对应书节、要做什么、官方仓源码映射、从哪个实验起手。
+全部 28 个实验通过全量构建验证。骨架 README 含对应书节、源码映射、踩坑记录。
 
 # 代码仓结构说明
 每一个目录代表一个实验，命名遵循“章节_名称”的命名方式
@@ -60,9 +73,12 @@ asm.S     ──as --32───┼─ ld -T kernel.lds ──> system
 ```
 
 关键经验（详见各实验 README 的“常见问题”）：
-1. 镜像必须补齐到 1.44MB，否则 qemu 猜错软盘几何参数导致读盘死循环
-2. 内核 C 代码必须用链接脚本固定 head.o 在 0x0（gcc -O2 的 .text.startup 会乱序）
-3. 链接 C 与汇编符号时，`extern void *idt` 与 `extern unsigned long idt[]` 完全不同
+1. 镜像必须补齐到 1.44MB（qemu 软盘几何参数）；head.S 的 std 必须配对 cld（DF=1 时 C 结构体拷贝反向执行）
+2. 内核 C 代码必须用链接脚本固定 head.o 在 0x0；GDT 下标 8 字节/项的指针运算陷阱
+3. 系统调用里绝不能忙等/睡眠忘开中断（int 0x80 门 IF=0 饿死中断和调度器）
+4. EOI 时序（先 EOI 再可能切任务）；级联中断两个 IMR 位都要开
+5. 按 1KB 块读写缓冲必须给足 1KB（栈炸教训）；内核栈 4KB 内不放大数据缓冲
+6. IDE 数据口必须 inw；`extern void *idt` 与 `extern unsigned long idt[]` 完全不同
 
 # 学习建议
 
