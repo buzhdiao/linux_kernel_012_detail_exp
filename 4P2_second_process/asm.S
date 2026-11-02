@@ -145,9 +145,13 @@ timer_interrupt:
 	movw %ax, %ds
 	movw %ax, %es
 	movw %ax, %fs
-	call do_timer
+	# EOI 必须在 do_timer 之前发！do_timer 里的 schedule() 可能触发
+	# 任务切换（ljmp 新 TSS），CPU 一去不回——若此时 ISR 位还挂着，
+	# 8259A 会阻塞后续所有 IRQ0，新进程的时间片永远走不动，死锁。
+	# 先 EOI 再处理，本中断被新中断嵌套的极端情况由关中断保护
 	movb $0x20, %al			# EOI：8259A 主片
 	outb %al, $0x20
+	call do_timer
 	popl %ebp
 	popl %edi
 	popl %esi

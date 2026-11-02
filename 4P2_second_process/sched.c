@@ -156,6 +156,12 @@ void sched_init(void)
 	outb_p(0x36, 0x43);		/* 控制字：通道0，先低后高，方式3，二进制 */
 	outb_p(LATCH & 0xff, 0x40);	/* 初值低字节 */
 	outb(LATCH >> 8, 0x40);		/* 初值高字节，写入即开始计数 */
+
+	/*
+	 * 解除 IRQ0 的屏蔽：setup.S 进保护模式前向主片 0x21 写了 0xFF
+	 * 屏蔽了全部 IRQ，这里只放开 bit0（IRQ0 时钟），时钟中断才能进来
+	 */
+	outb(inb_p(0x21) & ~0x01, 0x21);
 }
 
 /*
@@ -236,10 +242,13 @@ void schedule(void)
 			break;
 	}
 
-	if (task[next] != current)
+	if (task[next] != current) {
+		current->counter = current->priority;	/* 时间片重新充满，
+							   下次轮到时从头计 */
 		switch_to(next);
-	else
+	} else {
 		current->counter = current->priority;
+	}
 }
 
 /*

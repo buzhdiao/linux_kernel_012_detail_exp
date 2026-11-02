@@ -31,6 +31,14 @@ static inline void outb_p(u8 value, u16 port)
 	__asm__ volatile("outb %0,%1\n\tjmp 1f\n1:\tjmp 1f\n1:" :: "a"(value), "d"(port));
 }
 
+/* 带短暂停顿的端口读 */
+static inline u8 inb_p(u16 port)
+{
+	u8 v;
+	__asm__ volatile("inb %1,%0\n\tjmp 1f\n1:\tjmp 1f\n1:" : "=a"(v) : "d"(port));
+	return v;
+}
+
 /* console.c */
 void con_init(void);
 void con_putc(char c);

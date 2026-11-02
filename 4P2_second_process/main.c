@@ -17,6 +17,20 @@
 extern long mem_init(long start, long end);
 extern void trap_init(void);
 
+/*
+ * 用户态发起系统调用的唯一通道：int 0x80（DPL=3 的调用门）。
+ * EAX = 系统调用号，EBX = 参数。用户态绝不能直接 call 内核函数——
+ * 那样代码确实能执行（用户代码段够得着内核地址），但一碰到特权指令
+ * （如 printk 最终的 out 0x3d4 写光标）就 #GP，本实验的第一个版本
+ * 正是栽在这里
+ */
+static int sys_call(int nr, int arg)
+{
+	int ret;
+	__asm__ volatile("int $0x80" : "=a"(ret) : "a"(nr), "b"(arg));
+	return ret;
+}
+
 /* 任务间短暂让出 CPU 的忙等延时（约 1 秒），期间时钟中断会抢占 */
 static void delay_1s(void)
 {
@@ -29,7 +43,7 @@ static void delay_1s(void)
 static void user_loop0(void)
 {
 	for (;;) {
-		sys_print(0, "hello from task 0");
+		sys_call(0, (int)"hello from task 0");
 		delay_1s();
 	}
 }
@@ -38,7 +52,7 @@ static void user_loop0(void)
 void user_task1(void)
 {
 	for (;;) {
-		sys_print(1, "hello from task 1");
+		sys_call(1, (int)"hello from task 1");
 		delay_1s();
 	}
 }
