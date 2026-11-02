@@ -134,6 +134,11 @@ def build(out):
     fs.create_file(root, 'readme', readme)
     fs.mkdir(root, 'etc')
 
+    # 可执行文件（7P6）：flat binary（ld -Ttext=0 --oformat binary 产物）
+    import os
+    if os.path.exists('/tmp/user_hello.bin'):
+        fs.create_file(root, 'hello.exe', open('/tmp/user_hello.bin', 'rb').read())
+
     open(out, 'wb').write(fs.finish())
     print(f"minix fs: {TOTAL_BLOCKS} blocks, inodes={fs.next_inode-1}, "
           f"zones used={fs.next_zone-FIRST_DATA_ZONE}, out={out}")
