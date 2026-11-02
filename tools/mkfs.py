@@ -109,6 +109,8 @@ class MinixFS:
         self.img[2*BLOCK:3*BLOCK] = imap
         # ---- zone 位图：数据区已用 zone 置 1 ----
         zmap = bytearray(BLOCK)
+        for z in range(0, FIRST_DATA_ZONE):     # 保留区（引导块+元数据）标记为已用
+            zmap[z >> 3] |= 1 << (z & 7)
         for z in range(FIRST_DATA_ZONE, self.next_zone):
             zmap[z >> 3] |= 1 << (z & 7)
         self.img[(2+IMAP_BLOCKS)*BLOCK:(3+IMAP_BLOCKS)*BLOCK] = zmap
