@@ -47,9 +47,9 @@ IDE： VS CODE
 | 7P3_file | 7.3 管理普通文件 | ✅ | open/read/close，用户程序首次读文件成功 |
 | 7P4_dir | 7.4 管理目录 | ✅ | mkdir/creat/rmdir 写路径（已知 i_size 写回问题见 README） |
 | 7P5_link | 7.5 文件链接 | ✅ | 硬链接 + nlinks 引用计数 |
-| 7P6_exec | 7.6 执行程序 | 🟡 WIP | execve 代码完成；首次任务切换 #GP 留作练习（README 有调试线索） |
+| 7P6_exec | 7.6 执行程序 | ✅ | execve 全流程：装载+建任务+切换+用户程序系统调用（qemu 验证输出 hello；修复过程见实验 README） |
 | 8P1_posix | 8.1 POSIX接口 | ✅ | getpid/uptime/sysinfo |
-| 8P2_process | 8.2 管理进程 | 🟡 WIP | exit/wait/kill/管道代码完成；演示段唤醒条件待修 |
+| 8P2_process | 8.2 管理进程 | ✅ | exit/wait/kill/管道（qemu 验证 fork→exit(42)→wait 收尸闭环；内核态 fork 栈拷贝等三个根因修复见实验 README） |
 | 8P3_clib | 8.3 构建C语言库 | ✅ | syscall 封装 + 用户态 printf，编译链验证（4556B 可执行） |
 
 全部 28 个实验通过全量构建验证。骨架 README 含对应书节、源码映射、踩坑记录。

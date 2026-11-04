@@ -29,8 +29,15 @@ int do_exit(int code)
 	/* 释放该任务的页（fork 时 COW 分配的那些）——简化：跳过精确
 	 * 追踪，只清 GDT 里的 TSS/LDT 描述符让槽位可复用 */
 
-	/* 唤醒可能在 wait 的父进程（简化：唤醒 task[0]） */
-	if (task[0] && task[0] != current && task[0]->state == TASK_UNINTERRUPTIBLE)
+	/* 唤醒可能在等待的父进程（简化：父进程固定为 task[0]）。
+	 * ★ 唤醒条件必须覆盖两种睡眠态：只认 UNINTERRUPTIBLE 的旧写法，
+	 * 若父进程在 INTERRUPTIBLE 睡眠（或未来任何新睡眠态），子进程
+	 * exit 后父进程永远等不到唤醒 → 僵尸无人收尸，演示段挂起。
+	 * 官方 do_exit → notify_parent → wake_up_parent 同样不挑剔
+	 * 父进程的睡眠类型——"通知 + 唤醒"是退出路径的固定动作 */
+	if (task[0] && task[0] != current &&
+	    (task[0]->state == TASK_UNINTERRUPTIBLE ||
+	     task[0]->state == TASK_INTERRUPTIBLE))
 		task[0]->state = TASK_RUNNING;
 
 	schedule();		/* 永不返回 */

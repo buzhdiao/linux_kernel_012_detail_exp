@@ -71,7 +71,11 @@ void sys_dispatch(int nr, struct pt_regs *regs)
 		break;
 	}
 	default:			/* 其余：直接打印字符串参数 */
-		printk("task %d: %s\n\r", current->pid, (char *)regs->ebx);
+		/* EBX 是"调用者段内偏移"：用户任务（LDT 基址 = start_code）
+		 * 必须加上 start_code 才是内核可读的线性地址。task0 在内核态
+		 * 直接调用、start_code=0，加上后值不变，新老实验都兼容 */
+		printk("task %d: %s\n\r", current->pid,
+		       (char *)(current->start_code + regs->ebx));
 		break;
 	}
 }

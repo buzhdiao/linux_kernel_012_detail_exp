@@ -115,7 +115,34 @@ int copy_process(int nr, struct pt_regs *regs)
 	p->tss.edi = regs->edi;
 	p->tss.es = regs->es & 0xffff;
 	p->tss.cs = regs->cs & 0xffff;
-	p->tss.ss = regs->ss & 0xffff;
+	/* ★ esp/ss 只有"用户态 → 内核态"的 int 0x80 才由 CPU 压栈
+	 * （特权级不变时硬件只压 eip/cs/eflags，pt_regs 末尾两项不存在，
+	 * 读到的是栈上残留垃圾——曾踩坑：task0 内核态直接 fork，子进程
+	 * TSS.ss 被填成垃圾 0x0f00，首次切换进子任务即 #TS）。
+	 * 内核态 fork 的第二个坑：子进程【不能】直接用父栈——它一跑
+	 * （printk 等调用链帧）就会把父进程 int 0x80 / 时钟中断的现场
+	 * 帧踩掉，父进程被换回时 iret 到垃圾地址（EIP=0x40）→ #GP 风暴。
+	 * 正确做法：把父栈"当前栈顶以上"的存活调用链整段拷到子进程
+	 * 自己的栈页顶部，子进程在副本上继续（帧内的返回地址指向内核
+	 * 代码，两份都有效） */
+	if ((regs->cs & 0xffff) == 0x08) {
+		extern unsigned long stack_start;	/* 父栈顶（sched.c） */
+		unsigned long top = stack_start;
+		unsigned long src = (unsigned long)regs + 14 * 4; /* int 0x80 时的父 esp */
+		unsigned long bytes = top - src;
+		unsigned long *d, *s, n;
+
+		p->tss.ss = 0x10;
+		p->tss.esp = p->tss.esp0 - bytes;
+		d = (unsigned long *)p->tss.esp;
+		s = (unsigned long *)src;
+		n = (bytes + 3) / 4;
+		while (n--)
+			*d++ = *s++;
+	} else {
+		p->tss.esp = regs->esp;
+		p->tss.ss = regs->ss & 0xffff;
+	}
 	p->tss.ds = regs->ds & 0xffff;
 	p->tss.fs = regs->fs & 0xffff;
 	p->tss.gs = regs->gs & 0xffff;

@@ -103,7 +103,13 @@ void child_exit_task(void)
 
 void process_demo(void)
 {
-	int pid, status = 0;
+	/* ★ status 用静态存储：内核态发起的 int 0x80，CPU/中断桩的现场帧
+	 * 就压在调用者 SP 下方的保留区里，栈上局部变量的地址会与桩帧的
+	 * pt_regs 槽位重叠（实测 &status 正好落在 eax 槽），wait 写入的
+	 * 退出码随即被返回值覆盖。用户态调用无此问题（帧在用户栈）。
+	 * 曾踩坑：exit_code 打印恒为 0 */
+	static int status = 0;
+	int pid;
 
 	pid = fork_u();
 	if (pid == 0) {

@@ -67,7 +67,6 @@ int do_execve(const char *path)
 	struct m_inode *mi;
 	int fd, nr, i;
 	unsigned long image_size, npages, new_base;
-	unsigned char *kbuf;
 	struct task_struct *p;
 	unsigned long page;
 
@@ -78,17 +77,13 @@ int do_execve(const char *path)
 	}
 	image_size = mi->i_size;
 
-	/* 读镜像到内核临时缓冲（逐块经文件层） */
-	kbuf = (unsigned char *)get_free_page();	/* 先拿一页做中转不够——
-							 * 教学：镜像小（<4KB），
-							 * 用两页循环搬运 */
+	/* 读镜像：直接从文件层读进新分配的物理页（不经过内核栈上的
+	 * 大块临时缓冲——file_read 自身已有 blk[1024] 局部缓冲，若这里
+	 * 再放 tmp[1024]，两层叠加再压上 hd 驱动调用链，4KB 内核栈必炸，
+	 * 正是 README 踩坑第 5 条的场景） */
 	{
-		/* 简化：用文件层直接读到一系列新分配的物理页，
-		 * 不经过大块内核缓冲 */
-		unsigned char tmp[1024];
 		unsigned long loaded = 0;
 
-		(void)kbuf;
 		fd = file_open(path, 1);
 		if (fd < 0)
 			return -1;
@@ -103,33 +98,33 @@ int do_execve(const char *path)
 		p = (struct task_struct *)get_free_page();
 		if (!p)
 			return -1;
+		/* ★ 先把新任务标成不可调度，再挂 task[]！p 是一张未清零的页，
+		 * state 恰好常为 0（=TASK_RUNNING）：若先 task[nr]=p 再慢慢装载
+		 * （期间 hd I/O 数毫秒，时钟中断照常触发），schedule() 会扫到
+		 * 这个"看似就绪"的半成品，switch_to(1) ljmp 一个还没写进 GDT 的
+		 * TSS → #GP 风暴。fork.c 同位置也是先 UNINTERRUPTIBLE 遮住，
+		 * 收尾才 state=RUNNING——这里必须遵守同样的纪律 */
+		p->state = TASK_UNINTERRUPTIBLE;
 		task[nr] = p;
 
-		/* 每页：分配物理页 → 从文件读 4KB → put_page 映射到
-		 * new_base + page*4096 → 页内容已经在物理页里 */
+		/* 每页：分配物理页 → file_read 直接读进去（file_read 内部
+		 * 按 1KB 块循环搬运，一次可读任意长度）→ put_page 映射到
+		 * new_base + page*4096 */
 		for (i = 0; (unsigned long)i < npages; i++) {
 			unsigned long phy = get_free_page();
-			int n, left = image_size - loaded, j;
+			int n, left = image_size - loaded;
 
 			if (!phy)
 				return -1;
 			if (left > 4096)
 				left = 4096;
-			/* 文件读出到临时页再拷（file_read 每次最多跨 1 块，
-			 * 这里逐 1KB 读进物理页对应位置） */
-			{
-				int got = 0;
-				while (got < left) {
-					n = file_read(fd, tmp, 1024);
-					if (n <= 0)
-						break;
-					for (j = 0; j < n; j++)
-						((unsigned char *)phy)[loaded + got + j] = tmp[j];
-					got += n;
-				}
+			n = file_read(fd, (char *)phy, left);
+			if (n <= 0) {
+				free_page(phy);
+				break;
 			}
 			put_page(phy, new_base + i * 4096);
-			loaded += left;
+			loaded += n;
 		}
 		file_close(fd);
 
@@ -148,11 +143,13 @@ int do_execve(const char *path)
 		p->tss.eax = p->tss.ecx = p->tss.edx = p->tss.ebx = 0;
 		p->tss.esp = 0x60000;			/* 用户栈（空闲物理区） */
 		/* 给用户栈一个真实物理页（没有它第一次压栈就是缺页，
-		 * 本版 do_no_page 未实现按需调页） */
+		 * 本版 do_no_page 未实现按需调页）。注意压栈写的是 esp-4：
+		 * 第一条 push 落在 0x5fffc，所以页要映射到 [0x5f000,0x60000)，
+		 * 而不是从 0x60000 起（差一页，第一次 push 就缺页） */
 		{
 			unsigned long stk = get_free_page();
 			if (stk)
-				put_page(stk, new_base + 0x60000);
+				put_page(stk, new_base + 0x60000 - 4096);
 		}
 		p->tss.ebp = p->tss.esi = p->tss.edi = 0;
 		p->tss.cs = 0x0f;			/* LDT 用户代码段 */
